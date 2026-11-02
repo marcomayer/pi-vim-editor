@@ -88,8 +88,6 @@ export function cursorFor(editor: object, tui: TUI): Cursor | undefined {
         terminal.write(`\x1b[${next} q`);
         shape = next;
       }
-      // Leave Pi's fake-cursor markers alone: Pi drops the focused fake cursor
-      // itself while the hardware cursor is shown.
     },
     dispose() {
       if (disposed) return;
