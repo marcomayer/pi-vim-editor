@@ -269,6 +269,16 @@ test.each([
   const frame = terminal.output.findIndex((text) => text.includes("INSERT"));
   expect(terminal.output.indexOf("\x1b[6 q")).toBeLessThan(frame);
   expect(terminal.output[frame]).not.toContain("\x1b[7m");
+  // The hardware cursor replaces Pi's fake cursor; text after it stays.
+  editor.setText("abcdef");
+  editor.handleInput("\x1b[D");
+  editor.handleInput("\x1b[D");
+  const typed = terminal.output.length;
+  ui.renderNow();
+  const written = terminal.output.slice(typed).join("");
+  expect(written).toContain("abcdef");
+  expect(written).not.toContain("\x1b_pi:");
+  expect(written).not.toContain("\x1b[7m");
   editor.handleInput("\x1b");
   ui.renderNow();
   expect(terminal.output).toContain("\x1b[2 q");

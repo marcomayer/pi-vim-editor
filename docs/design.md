@@ -383,9 +383,9 @@ in INSERT, 2 (steady block) in NORMAL/Visual, and 4 (steady underline) in
 REPLACE. It checks the public `tui.getShowHardwareCursor()` at render time
 and never changes cursor visibility. It only writes a shape when it changes
 and the focused editor emits `CURSOR_MARKER`. It leaves Pi's fake-cursor
-markers (`ESC _pi:fc BEL` … `ESC _pi:/fc BEL`) alone: with the hardware cursor
-shown, Pi's `resolveFakeCursors` drops the focused fake cursor itself, and only
-recognizes it while the opening and closing markers are both present.
+markers (`ESC _pi:fc BEL` … `ESC _pi:/fc BEL`) alone and lets Pi resolve them:
+with the hardware cursor shown, Pi's `resolveFakeCursors` drops the fake cursor
+that directly follows `CURSOR_MARKER`.
 
 The cursor controller decorates the editor's public `focused` property,
 composing with existing accessors, to reset on focus loss even when a dialog
