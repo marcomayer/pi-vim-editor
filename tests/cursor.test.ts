@@ -3,6 +3,7 @@ import { CustomEditor } from "@earendil-works/pi-coding-agent";
 import {
   Container,
   CURSOR_MARKER,
+  renderFakeCursor,
   TuiAltScreen,
   TuiMainScreen,
   visibleWidth,
@@ -89,14 +90,13 @@ test("uses a bar for INSERT, underline for REPLACE, and block for NORMAL and Vis
   cursor.dispose();
 });
 
-test("removes only Pi's fake cursor, preserving the marker, Unicode, layout, and Visual selection", () => {
+test("keeps Pi's fake cursor whole for Pi to drop, preserving the marker, Unicode, layout, and Visual selection", () => {
   const { editor, type, render, cursor } = setup();
   editor.setText("a👩‍💻界é");
   type("\x1b", "0", "l", "i");
   const lines = render();
-  expect(lines[1]).toContain(`a${CURSOR_MARKER}👩‍💻`);
+  expect(lines[1]).toContain(`a${CURSOR_MARKER}${renderFakeCursor("👩‍💻")}`);
   expect(lines[1]).toContain("界é");
-  expect(lines[1]).not.toMatch(SOFTWARE_CURSOR);
   expect(visibleWidth(lines[1])).toBe(40);
   const visual = type("\x1b", "0", "v", "l");
   expect(visual[1]).toContain("\x1b[7ma");
